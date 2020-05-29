@@ -6,7 +6,7 @@ function usePermission(policy: Policy, init?: PolicyInit) {
       const policyAction = policy[action];
 
       if (!policyAction) {
-        throw new Error(`The [${actions}] action could not be found.`);
+        throw new Error(`The [${action}] action could not be found.`);
       }
 
       if (init?.forUser) {
