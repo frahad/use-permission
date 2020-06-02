@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A React hook that provides a simple, expressive and scalable way for you to manage permissions within your React application.
+  A React hook that provides a simple, declarative and scalable way for you to manage permissions within your React application.
 </p>
 
 <p align="center">
@@ -20,11 +20,12 @@
 
 ## Contents
 
-- [Usage](#usage)
+- [Usage](#-usage)
   - [Authorization logic](#authorization-logic)
     - [Writing Policies](#writing-policies)
   - [Authorizing Actions](#authorizing-actions)
-- [License](#license)
+  - [Intercepting Checks](#intercepting-checks)
+- [License](#-license)
 
 ## 🚀 Usage
 
@@ -50,13 +51,38 @@ return (
 );
 ```
 
-Seems fine, right? The problem is, as your application grows and you have to add more complex conditions to render the button, your code becomes hard to maintain. This is where `policies` come into play!
+Seems fine, right? The problem is, as your application grows and you have to add more complex conditions to render the button, your code becomes hard to maintain. Take a look at this real world example of an React Native delivery app:
+
+```jsx
+function Delivery() {
+  // ...
+
+  return (
+    <View>
+      ...
+
+      {user.type === 'delivery-driver' &&
+        user.id === delivery.driver.id &&
+        delivery.status &&
+        delivery.status.slug === 'collected' && (
+        <Button onPress={sendNotification}>
+          Send notification
+        </Button>
+      )}
+    </View>
+  );
+}
+```
+
+In the given example, we're conditionally rendering a notification button if the authenticated user is the driver that collected the package, this is because the driver can notify the recipient about the order's arrival. But there are two problems, besides we are polluting the component with all these conditions, we were also unable to reuse the authorization logic in other parts of our application.
+
+By abstracting the authorization logic, you avoid code duplication and allow your application to scale in a much better way. This is where `policies` come into play!
 
 #### Writing Policies
 
 Basically, Policies are functions that organize authorization logic around a particular resource.
 
-Now, let's rewrite the previous example by creating an `ArticlePolicy` and then use the methods provided by the `usePermission` hook to check if the user is allowed to update the article.
+Now, back to the articles, let's rewrite the first example by creating an `ArticlePolicy` and then use the methods provided by the `usePermission` hook to check if the user is allowed to update the article.
 
 ```js
 function ArticlePolicy() {
@@ -146,6 +172,28 @@ return (
 | `allows` | `string` or `string[]` | The actions that, if allowed to the user, will cause the rendering of the child. |
 | `denies` | `string` or `string[]` | The actions that, if denied to the user, will cause the rendering of the child.  |
 | `on`     | `object`               | Defines the resource used by the action.                                         |
+
+### Intercepting Checks
+
+Sometimes, you may wish to authorize all actions within a given policy to a given user. To accomplish this, you may define a `before` method on the policy:
+
+```js
+function ArticlePolicy() {
+  return {
+    before: user => {
+      return user.type.slug === 'super-admin';
+    },
+
+    update: (user, article) => {
+      return user.id === article.author.id;
+    },
+
+    // ...
+  };
+}
+```
+
+When defined, the `before` method is called before all other authorization checks considering only truthy values, which means that, if your implementation of `before` returns a falsy value, then `usePermission` will proceed with the authorization checking for the given action.
 
 ## 📄 License
 
