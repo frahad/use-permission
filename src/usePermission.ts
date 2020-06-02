@@ -2,6 +2,18 @@ import { Policy, PolicyInit, Actions, PermissionProps } from './types';
 
 function usePermission(policy: Policy, init?: PolicyInit) {
   const check = (actions: Actions, resource: object) => {
+    if (policy.before) {
+      if (init?.forUser) {
+        const beforeAllows = policy.before(init.forUser, resource);
+
+        if (beforeAllows) {
+          return beforeAllows;
+        }
+      } else {
+        throw new Error('The [before] action has missing "user" parameter.');
+      }
+    }
+
     const isAllowed = (action: string) => {
       const policyAction = policy[action];
 
