@@ -1,12 +1,9 @@
 {
   "name": "use-permission",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rollup -c ./rollup.config.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "build": "rm -rf ./dist && rollup -c ./rollup.config.js"
   },
   "devDependencies": {
     "@rollup/plugin-babel": "^5.0.2",
@@ -14,10 +11,6 @@
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-typescript": "^4.1.2",
     "@rollup/plugin-url": "^5.0.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
