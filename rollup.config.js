@@ -1,5 +1,4 @@
 import path from 'path';
-import url from '@rollup/plugin-url';
 import resolve from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 import typescript from '@rollup/plugin-typescript';
@@ -23,7 +22,6 @@ export default {
     },
   ],
   plugins: [
-    url(),
     resolve({
       extensions: ['.js', '.ts', '.tsx'],
     }),
