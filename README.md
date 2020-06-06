@@ -193,7 +193,7 @@ function ArticlePolicy() {
 }
 ```
 
-When defined, the `before` method is called before all other authorization checks considering only truthy values, which means that, if your implementation of `before` returns a falsy value, then `usePermission` will proceed with the authorization checking for the given action.
+When defined, the `before` method is called before all other authorization checks considering only truthy values, which means that, if your implementation of `before` evaluates to `false`, then `usePermission` will proceed with the authorization checking for the given action.
 
 ## 📄 License
 
