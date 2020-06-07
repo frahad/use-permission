@@ -21,7 +21,6 @@ module.exports = {
     '@typescript-eslint',
     'import',
     'import-helpers',
-    'react-hooks',
     'jest',
     'prettier',
   ],
