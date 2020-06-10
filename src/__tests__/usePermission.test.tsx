@@ -3,7 +3,7 @@ import { Policy } from '../types';
 import usePermission from '../usePermission';
 
 describe('Permission Check', () => {
-  it('should allow authors to update an article.', () => {
+  it('should allow an author to update its article.', () => {
     const ArticlePolicy = (): Policy => ({
       update: (user, article) => {
         return user.id === article.author.id;
@@ -30,7 +30,7 @@ describe('Permission Check', () => {
     expect(allows).toBe(true);
   });
 
-  it('should deny end-users to delete an article.', () => {
+  it('should deny end-users from deleting an article.', () => {
     const ArticlePolicy = (): Policy => ({
       delete: user => {
         return user.role.slug === 'super-admin';
