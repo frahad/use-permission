@@ -1,4 +1,6 @@
+import React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
+import { render } from '@testing-library/react';
 import { Policy } from '../types';
 import usePermission from '../usePermission';
 
@@ -93,5 +95,47 @@ describe('Intercept Check', () => {
     });
 
     expect(allows).toBe(true);
+  });
+});
+
+describe('Permission Check through the Permission component', () => {
+  it('should display the settings button for the article\'s author.', () => {
+    const ArticlePolicy = (): Policy => ({
+      update: (user, article) => {
+        return user.id === article.author_id;
+      },
+
+      delete: (user, article) => {
+        return user.id === article.author_id;
+      },
+    });
+
+    const { result } = renderHook(() =>
+      usePermission(ArticlePolicy(), {
+        forUser: {
+          id: 1,
+          name: 'John Doe',
+        },
+      }),
+    );
+
+    const article = {
+      title: 'My First Article',
+      body: 'Lorem ipsum dolor sit amet, consectetur...',
+      author_id: 1,
+    };
+
+    const { Permission } = result.current;
+    const { container } = render(
+      <Permission allows={['update', 'delete']} on={article}>
+        <button>Settings</button>
+      </Permission>,
+    );
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <button>
+        Settings
+      </button>
+    `);
   });
 });
