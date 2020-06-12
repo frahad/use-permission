@@ -45,12 +45,12 @@ function usePermission(policy: Policy, init?: PolicyInit) {
 
   const Permission = (props: PermissionProps) => {
     if (!props.allows && !props.denies) {
-      throw new Error('Missing actions for Permission component.');
+      throw new Error('Missing actions for [Permission] component.');
     }
 
     const shouldRender = props.allows
       ? allows(props.allows, props.on)
-      : denies(props.denies, props.on);
+      : denies(props.denies!, props.on);
 
     return shouldRender ? props.children : null;
   };

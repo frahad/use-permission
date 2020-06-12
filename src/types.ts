@@ -11,8 +11,8 @@ export interface PolicyInit {
 export type Actions = string | string[];
 
 export interface PermissionProps {
-  denies: Actions;
-  allows: Actions;
+  denies?: Actions;
+  allows?: Actions;
   on: object;
   children: ReactElement;
 }
