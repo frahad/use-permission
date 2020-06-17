@@ -99,7 +99,7 @@ describe('Intercept Check', () => {
 });
 
 describe('Permission Check through the Permission component', () => {
-  it('should display the settings button for the article\'s author.', () => {
+  it("should display the settings button for the article's author.", () => {
     const ArticlePolicy = (): Policy => ({
       update: (user, article) => {
         return user.id === article.author_id;
@@ -120,6 +120,7 @@ describe('Permission Check through the Permission component', () => {
     );
 
     const article = {
+      id: 1,
       title: 'My First Article',
       body: 'Lorem ipsum dolor sit amet, consectetur...',
       author_id: 1,
@@ -128,14 +129,16 @@ describe('Permission Check through the Permission component', () => {
     const { Permission } = result.current;
     const { container } = render(
       <Permission allows={['update', 'delete']} on={article}>
-        <button>Settings</button>
+        <a href={`/articles/${article.id}/settings`}>Settings</a>
       </Permission>,
     );
 
     expect(container.firstChild).toMatchInlineSnapshot(`
-      <button>
+      <a
+        href="/articles/${article.id}/settings"
+      >
         Settings
-      </button>
+      </a>
     `);
   });
 });

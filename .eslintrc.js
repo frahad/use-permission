@@ -14,16 +14,10 @@ module.exports = {
       jsx: true,
       tsx: true,
     },
-    sourceType: 'module'
+    sourceType: 'module',
   },
   parser: '@typescript-eslint/parser',
-  plugins: [
-    '@typescript-eslint',
-    'import',
-    'import-helpers',
-    'jest',
-    'prettier',
-  ],
+  plugins: ['@typescript-eslint', 'import', 'jest', 'prettier'],
   extends: [
     'airbnb',
     'plugin:@typescript-eslint/recommended',
@@ -37,24 +31,13 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/camelcase': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
     'react/jsx-filename-extension': [
       'warn',
       {
         extensions: ['.jsx', '.tsx'],
-      },
-    ],
-    'import-helpers/order-imports': [
-      'warn',
-      {
-        'newlines-between': 'always',
-        groups: [
-          ['/^react/'],
-          ['builtin', 'external', 'internal'],
-          '/^@/',
-          ['parent', 'sibling', 'index'],
-        ],
-        alphabetize: { order: 'asc', ignoreCase: true },
       },
     ],
     'import/no-dynamic-require': 'off',
@@ -62,8 +45,6 @@ module.exports = {
     'no-unused-expressions': 'off',
     'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'import/extensions': [
       'error',
