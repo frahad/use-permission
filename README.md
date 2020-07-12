@@ -24,7 +24,7 @@
   - [Authorization logic](#authorization-logic)
     - [Writing Policies](#writing-policies)
   - [Authorizing Actions](#authorizing-actions)
-    - [Permission component](#Permission)
+    - [Permission component](#permission-)
   - [Intercepting Checks](#intercepting-checks)
 - [License](#-license)
 
