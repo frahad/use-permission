@@ -1,6 +1,6 @@
 {
   "name": "use-permission",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf ./dist && rollup -c ./rollup.config.js",
