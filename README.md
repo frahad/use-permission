@@ -24,6 +24,7 @@
   - [Authorization logic](#authorization-logic)
     - [Writing Policies](#writing-policies)
   - [Authorizing Actions](#authorizing-actions)
+    - [Permission component](#Permission)
   - [Intercepting Checks](#intercepting-checks)
 - [License](#-license)
 
@@ -51,7 +52,7 @@ return (
 );
 ```
 
-Seems fine, right? The problem is, as your application grows and you have to add more complex conditions to render the button, your code becomes hard to maintain. Take a look at this real world example of an React Native delivery app:
+Seems fine, right? The problem is, as your application grows and you have to add more complex conditions to render the button, your code becomes hard to maintain. Take a look at this real world example of a React Native delivery app:
 
 ```jsx
 function Delivery() {
@@ -74,7 +75,7 @@ function Delivery() {
 }
 ```
 
-In the given example, we're conditionally rendering a notification button if the authenticated user is the driver that collected the package, this is because the driver can notify the recipient about the order's arrival. But there are two problems, besides we are polluting the component with all these conditions, we were also unable to reuse the authorization logic in other parts of our application.
+In the given example, we're conditionally rendering a notification button if the authenticated user is the driver who collected the package, this is because the driver can notify the recipient about the order's arrival. But there are two problems, besides we are polluting the component with all these conditions, we were also unable to reuse the authorization logic in other parts of our application.
 
 By abstracting the authorization logic, you avoid code duplication and allow your application to scale in a much better way. This is where `policies` come into play!
 
@@ -88,7 +89,10 @@ Now, back to the articles, let's rewrite the first example by creating an `Artic
 function ArticlePolicy() {
   return {
     update: (user, article) => {
-      return user.id === article.author.id;
+      return (
+        user.role.slug === 'super-admin' ||
+        user.id === article.author.id
+      );
     },
 
     // ...
@@ -96,7 +100,7 @@ function ArticlePolicy() {
 }
 ```
 
-Note that you can define the authorization logic for any actions your user can perform, such as `index`, `create`, `view`, `update`, `delete`, etc.
+> Note that each method within your policy represents an action that the user can perform (e.g., `index`, `create`, `view`, `update`, `delete`).
 
 ### Authorizing Actions
 
@@ -137,10 +141,14 @@ function App() {
 }
 ```
 
-The `usePermission` also provides a `Permission` component that allows you to conditionally render a child component in a react style:
+Take a look at how simple and declarative your code became, and how you're able to reuse the authorization logic in other parts of your application!
+
+#### `<Permission />`
+
+Note that the `usePermission` also provides a `Permission` component that allows you to conditionally render a child component:
 
 ```jsx
-...
+// ...
 
 const { Permission } = usePermission(ArticlePolicy(), {
   forUser: {
@@ -165,17 +173,17 @@ return (
 );
 ```
 
-#### `<Permission />`
+##### Props
 
-| Prop     | Type                   | Description                                                                      |
+| Name     | Type                   | Description                                                                      |
 | -------- | ---------------------- | -------------------------------------------------------------------------------- |
 | `allows` | `string` or `string[]` | The actions that, if allowed to the user, will cause the rendering of the child. |
 | `denies` | `string` or `string[]` | The actions that, if denied to the user, will cause the rendering of the child.  |
-| `on`     | `object`               | Defines the resource used by the action.                                         |
+| `on`     | `object`               | Defines the resource to authorize.                                               |
 
 ### Intercepting Checks
 
-Sometimes, you may wish to authorize all actions within a given policy to a given user. To accomplish this, you may define a `before` method on the policy:
+Sometimes, you may wish to authorize all actions within a given policy to a given user. To accomplish this, you may define a `before` method within the policy:
 
 ```js
 function ArticlePolicy() {
@@ -193,7 +201,7 @@ function ArticlePolicy() {
 }
 ```
 
-When defined, the `before` method is called before all other authorization checks considering only truthy values, which means that, if your implementation of `before` evaluates to `false`, then `usePermission` will proceed with the authorization checking for the given action.
+When defined, the `before` method is called before all other authorization checks considering only truthy values, which means that, if your implementation of `before` evaluates to a falsey value, then `usePermission` will proceed with the authorization checking for the given action.
 
 ## 📄 License
 
