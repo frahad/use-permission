@@ -1,7 +1,13 @@
-import { Policy, PolicyInit, Actions, PermissionProps } from './types';
+import {
+  Policy,
+  PolicyInit,
+  Actions,
+  Resource,
+  PermissionProps,
+} from './types';
 
 function usePermission(policy: Policy, init?: PolicyInit) {
-  const check = (actions: Actions, resource: object) => {
+  const check = (actions: Actions, resource: Resource) => {
     if (policy.before) {
       if (init?.forUser) {
         const beforeAllows = policy.before(init.forUser, resource);
@@ -35,11 +41,11 @@ function usePermission(policy: Policy, init?: PolicyInit) {
     return isAllowed(actions);
   };
 
-  const allows = (actions: Actions, resource: object) => {
+  const allows = (actions: Actions, resource: Resource) => {
     return check(actions, resource);
   };
 
-  const denies = (actions: Actions, resource: object) => {
+  const denies = (actions: Actions, resource: Resource) => {
     return !allows(actions, resource);
   };
 
