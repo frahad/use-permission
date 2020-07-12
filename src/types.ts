@@ -1,18 +1,20 @@
 import { ReactElement } from 'react';
 
+export type Resource = Record<string, any>;
+
 export interface Policy {
-  [name: string]: (...resources: any[]) => boolean;
+  [name: string]: (...resources: Resource[]) => boolean;
 }
 
 export interface PolicyInit {
-  forUser: object;
+  forUser: Record<string, any>;
 }
 
 export type Actions = string | string[];
 
 export interface PermissionProps {
-  denies?: Actions;
   allows?: Actions;
-  on: object;
+  denies?: Actions;
+  on: Resource;
   children: ReactElement;
 }
